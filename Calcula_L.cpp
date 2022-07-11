@@ -29,12 +29,13 @@
 // DECLARACION DE ARCHIVOS DE DATOS/RESULTADOS
 //------------------------------------------------------------------------------
 
- //FILE *salu = fopen("TWBM_os.txt","w");
+ FILE *sali = fopen("x.txt","w");
+ FILE *salu = fopen("L.txt","w");
 
 //-------------------------Punteros a matrices y vectores----------------------
 double *x;
 
-
+double abso(double);
 double L(double*,double);
 float gasdev(long *);
 float ran1(long *);
@@ -112,30 +113,28 @@ float gasdev(long *idum)
     }
 }
 
-
+double abso(double x) {
+double val=sqrt(x*x);
+return val;
+}
 
 
 double L(double* x, double E, int N) {
 int Ltotal=0;
 int diagonales=0;
 double Lsal;
-//double g1=0,g2=0;
+double g1=0,g2=0,g3;
 
 
-printf("Ltotal=%d   diagonales=%d   \n\n ",Ltotal,diagonales);
+//printf("Ltotal=%d   diagonales=%d   \n\n ",Ltotal,diagonales);
 
 for (int r=1;r<=N-2;r++){
-x[0]=x[r]+E;  //condicion de contorno
-    for(int i=1;i<=N-r-2;i++){
+x[0]=x[r]+E+0.5;  //condicion de contorno
+    for(int i=1;i<=N-r-1;i++){
 
-       //  g1=ceil(E-abs(x[i]-x[i+r]));
-    //   g2=ceil(E-abs(x[i+1]-x[i+1+r]));
-    //     printf("r=%d   i=%d  ceil(E-abs(x[%d]-x[%d])=%f  x[%d]=%f   x[%d]=%f    \n",r,i,i,i+r,g1,i,x[i],i+r,x[i+r]);
-    //   printf("          ceil(E-abs(x[%d]-x[%d])=%f  x[%d]=%f   x[%d]=%f    \n",i+1,i+1+r,g2,i+1,x[i+1],i+1+r,x[i+1+r]);
-    //  getch();
 
-         Ltotal= Ltotal+((ceil(E-abs(x[i]-x[i+r]))*2-ceil(E-abs(x[i-1]-x[i-1+r])))*ceil(E-abs(x[i+1]-x[i+1+r]))*ceil(E-abs(x[i]-x[i+r])));
-         diagonales= diagonales+((ceil(E-abs(x[i]-x[i+r]))-ceil(E-abs(x[i-1]-x[i-1+r])))*ceil(E-abs(x[i+1]-x[i+1+r]))*ceil(E-abs(x[i]-x[i+r])));
+         Ltotal= Ltotal+((ceil(E-abso(x[i]-x[i+r]))*2-ceil(E-abso(x[i-1]-x[i-1+r])))*ceil(E-abso(x[i+1]-x[i+1+r]))*ceil(E-abso(x[i]-x[i+r])));
+         diagonales= diagonales+((ceil(E-abso(x[i]-x[i+r]))-ceil(E-abso(x[i-1]-x[i-1+r])))*ceil(E-abso(x[i+1]-x[i+1+r]))*ceil(E-abso(x[i]-x[i+r])));
 
  //    getch();
     }
@@ -154,31 +153,42 @@ return Lsal;
 //------------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-int N=500;
+int N=100;
 x=dvector(1,N+1); //datos a calcularle L
-double E=0.07;
+double E=0.3;
 
 long utime;
 utime=(long)time(NULL);					/*Unix time*/
 long idum3=utime;
 float ale2;
 
-for(int i=0;i<N;i++){    //genera vector de datos aleatorios para calcularles el L
- ale2=ran1(&idum3);
- x[i]=(double)ale2;
-printf(" x[%d]= %f  ",i,ale2);
+//for (int ii=1;ii<=10000;ii++){
+
+for(int i=0;i<=N;i++){    //genera vector de datos aleatorios para calcularles el L
+ale2=ran1(&idum3);
+x[i]=(double)ale2;
+//fprintf(sali,"%f  ",ale2);
 
 }
-printf(" \n");
-getch();
+
+/*x[1]=0.9;
+x[2]=0.9;
+x[3]=0.9;
+x[4]=0.9;
+x[5]=0.9;
+x[6]=0.9;*/
+
+//printf(" \n");
+//getch();
 //normalize_vector(double x_vec[], double Margins[2])  //normaliza x entre 0 y 1-E
 
 double Lmead;
 
 Lmead=L(x,E,N);
-printf("Lmean=%f   ",Lmead);
-getch();
+printf("Lmead=%f  ",Lmead);
+//printf("Lmean=%f   ",Lmead);
 
+//}
 free_dvector(x,1,N+1);
 return 0;
 }
