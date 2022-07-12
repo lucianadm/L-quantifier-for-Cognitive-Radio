@@ -1,8 +1,8 @@
 /*
-/*% Programa para decodificar Turbo Código, con el algoritmo MAP / BCJR, con Interleaver más grande
-% Autores Matlab: Damian Gustavo Levin Jorge Castiñeira   pasado a C por luciana :)
+/*% Programa para decodificar Turbo CÃ³digo, con el algoritmo MAP / BCJR, con Interleaver mÃ¡s grande
+% Autores Matlab: Damian Gustavo Levin Jorge CastiÃ±eira   pasado a C por luciana :)
 % Creado el: 5/10/2003
-% Última actualización: 16/12/2003        pasado a C 16/06/2010
+% Ãšltima actualizaciÃ³n: 16/12/2003        pasado a C 16/06/2010
 %--------------------------------------------------------------------------------------------
  */
 
@@ -187,7 +187,20 @@ double Lmead;
 Lmead=L(x,E,N);
 printf("Lmead=%f  ",Lmead);
 //printf("Lmean=%f   ",Lmead);
-
+ 
+/**Agregado por Maxi**/
+    FILE* outx = fopen("x.txt","w");
+    for (unsigned long int i_vec = 0; i_vec < N; i_vec++)
+    {
+        fprintf(outx,"%.10e\n",x[i_vec]);
+    }
+    fclose (outx);
+    
+    FILE* outL = fopen("Lmead.txt","w");
+    fprintf(outL,"%.10e\n",Lmead);
+    fclose (outL);
+/*********************/
+ 
 //}
 free_dvector(x,1,N+1);
 return 0;
